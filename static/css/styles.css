@@ -1,0 +1,23 @@
+.starter-template {
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.bit-price-graph{
+	height: 400px;
+	padding: 10px;
+	margin-bottom: 5%;
+}
+
+
+/* Dropdown button */
+
+
+/* Max and Min prices */
+span.top-price{
+	color: green;
+}
+
+span.low-price{
+	color: red;
+}

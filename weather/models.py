@@ -1,0 +1,15 @@
+from django.db import models
+
+# Create your models here.
+class Reading(models.Model):
+	location = models.CharField(max_length=100)
+	weather = models.CharField(max_length=50)
+	wind_str = models.CharField(max_length=100)
+	temp = models.IntegerField()
+	humidity = models.CharField(max_length=10)
+	precip = models.CharField(max_length=50)
+	icon_url = models.TextField()
+	observation_time = models.CharField(max_length=100)
+
+	def __str__(self):
+		return self.location

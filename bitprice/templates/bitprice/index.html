@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}BitPrice - Home{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="page-header">
+		<div class="dropdown pull-right">
+		  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Query by month
+		  <span class="caret"></span></button>
+		  <ul class="dropdown-menu">
+		    {% for month in months_choices %}
+			<li><a class="dropdown-item" href="{% url 'bitprice:monthly-records' month.0 %}">{{ month.1 }}</a></li>
+			{% endfor %}
+		  </ul>
+		</div>
+		<h1>{% if query_month %} {{ query_month }} {% else %} {% now "F" %} {% endif %} Bitcoin Price Index</h1>
+	</div>
+	<div id="bit-price-data" class="table-responsive">
+		<h3>Top price: <span class="top-price">${{ price_range.max_price | floatformat:2 | intcomma }}</span></h3>
+		<h3>Low price: <span class="low-price">${{ price_range.min_price | floatformat:2 | intcomma }}</span></h3>
+		<table class="table table-striped">
+			<thead>
+				<th>Update time</th>
+				<th>Time added</th>
+				<th>Kenya Shilling</th>
+				<th>US Dollar</th>
+			</thead>
+			<tbody>
+				{% if prices %}
+				{% for price in prices %}
+				<tr>
+					<td>{{ price.update_date }}</td>
+					<td>{{ price.time_added }}</td>
+					<td>ksh.{{ price.kes|floatformat:2|intcomma }}</td>
+					<td>${{ price.usd|intcomma }}</td>
+				</tr>
+				{% endfor %}
+				{% endif %}
+			</tbody>
+		</table>
+		<nav class="col-md-offset-4">
+			{% if prices.has_other_pages %}
+			  <ul class="pagination">
+			    {% if prices.has_previous %}
+			      <li><a href="?page={{ prices.previous_page_number }}">&laquo;</a></li>
+			    {% else %}
+			      <li class="disabled"><span>&laquo;</span></li>
+			    {% endif %}
+			    {% for i in prices.paginator.page_range %}
+			      {% if prices.number == i %}
+			        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+			      {% else %}
+			        <li><a href="?page={{ i }}">{{ i }}</a></li>
+			      {% endif %}
+			    {% endfor %}
+			    {% if prices.has_next %}
+			      <li><a href="?page={{ prices.next_page_number }}">&raquo;</a></li>
+			    {% else %}
+			      <li class="disabled"><span>&raquo;</span></li>
+			    {% endif %}
+			  </ul>
+			{% endif %}
+		</nav>
+	</div>
+</div>
+<div class="row">
+	<div class="page-header">
+		<h2>Bitcoin Price Trend Graphical Representation</h2>
+	</div>
+	<div id="pricechart" class="bit-price-graph"></div>
+</div>
+{% endblock %}
